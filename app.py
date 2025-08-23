@@ -3,6 +3,7 @@ import pandas as pd
 from datetime import date
 from pydantic import BaseModel, field_validator, ValidationError
 from pathlib import Path
+from dppmini.validators import normalize_gtin, gtin_is_valid, gtin_check_digit
 
 # ✅ ensure data dir exists
 DATA_DIR = Path("data")
@@ -57,6 +58,12 @@ file = st.sidebar.file_uploader("CSV with gtin,batch,expiry", type=["csv"])
 if file is not None:
     try:
         up = pd.read_csv(file, dtype=str)
+        up["gtin"] = up["gtin"].astype(str).map(normalize_gtin)
+        mask = up["gtin"].map(gtin_is_valid)
+        dropped = int((~mask).sum())
+        up = up.loc[mask, COLUMNS]
+        if dropped:
+            st.sidebar.warning(f"Dropped {dropped} rows with invalid GTINs.")
         missing = [c for c in COLUMNS if c not in up.columns]
         if missing:
             st.sidebar.error(f"Missing columns: {missing}")
