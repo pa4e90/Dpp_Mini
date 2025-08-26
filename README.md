@@ -1,6 +1,6 @@
 # DPP Mini
 
-Small Streamlit MVP for collecting items (GTIN, batch, expiry), validating GTIN check digits, uploading CSVs, and exporting data.  
+Small Streamlit MVP for collecting items (GTIN, batch, expiry), validating GTIN check digits, uploading CSVs, and exporting data.
 Data is saved locally to `data/items.csv` (git-ignored).
 
 ---
@@ -34,10 +34,14 @@ Open the printed URL (typically http://localhost:8501).
 ```bash
 pytest -q
 ```
-
+## Run with Docker
+```bash
+docker build -t dpp-mini:dev .
+docker run --rm -p 8501:8501 -v "$PWD/data:/app/data" dpp-mini:dev
+# open http://localhost:8501
 ---
 
-## Sample CSV
+###Sample CSV
 ```csv
 gtin,batch,expiry
 4006381333931,B123,2026-12-31
@@ -49,10 +53,10 @@ gtin,batch,expiry
 
 ## Usage
 
-- Add single item: enter GTIN / Batch / Expiry → click **Validate & Add**.  
+- Add single item: enter GTIN / Batch / Expiry → click **Validate & Add**.
   GTIN is normalized (spaces/dashes removed) and validated by check digit.
 
-- Upload CSV: use the sidebar to upload a file with columns `gtin,batch,expiry`.  
+- Upload CSV: use the sidebar to upload a file with columns `gtin,batch,expiry`.
   Invalid rows are dropped; duplicates are removed; data is persisted to `data/items.csv`.
 
 - Download: use **Download CSV** to export the full dataset.

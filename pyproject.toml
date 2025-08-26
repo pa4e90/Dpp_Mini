@@ -1,0 +1,20 @@
+# pyproject.toml — tooling config
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+extend-exclude = ["data", ".venv", ".git"]
+
+[tool.ruff.lint]
+# E/F = pycodestyle/pyflakes, I = import sorting, UP = pyupgrade
+select = ["E", "F", "I", "UP"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.pytest.ini_options]
+# Make pytest default to quiet output and look in these folders
+addopts = "-q"
+testpaths = ["test", "tests"]
